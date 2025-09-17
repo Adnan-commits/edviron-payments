@@ -1,99 +1,156 @@
-### Project Overview
+# School Payment Dashboard
 
-This project is a microservice for a School Payment and Dashboard Application. It has a backend that manages transactions and payments through a REST API and a frontend dashboard for displaying data. [cite\_start]The backend uses **Node.js** with **NestJS**, connects to **MongoDB Atlas**, and integrates with a payment gateway[cite: 8, 9, 11]. [cite\_start]The frontend is built with **React.js** and styled with **Tailwind CSS** or another framework[cite: 141, 144, 146].
+A comprehensive microservice application for managing school payments with a modern dashboard interface.
 
------
+## 🏗️ Project Overview
 
-### Features
+This project consists of a **backend microservice** that handles payment transactions through a REST API and a **frontend dashboard** for data visualization and management.
 
-#### Backend
+- **Backend**: Built with Node.js and NestJS, connected to MongoDB Atlas with payment gateway integration
+- **Frontend**: Developed using React.js with Tailwind CSS for modern, responsive styling
 
-  * [cite\_start]**Payment Gateway Integration**: The application includes a `POST /create-payment` route that accepts payment details and forwards them to the payment API's `create-collect-request` endpoint[cite: 46, 47, 48]. [cite\_start]It generates JWT-signed payloads as required by the payment gateway[cite: 49].
-  * [cite\_start]**Webhook Integration**: A `POST /webhook` endpoint is available to receive transaction updates from the payment gateway and update the database accordingly[cite: 59, 61, 80].
-  * [cite\_start]**User Authentication**: All API endpoints are secured using **JWT Authentication**[cite: 36, 38].
-  * [cite\_start]**Database Schemas**: The application uses **MongoDB** and defines schemas for `Order`, `Order Status`, and `Webhook Logs`[cite: 12, 30, 33].
-  * [cite\_start]**Data Retrieval**: It provides endpoints to fetch transactions, including a route that uses a MongoDB aggregation pipeline to combine order and order status schemas[cite: 83, 85].
-  * [cite\_start]**Performance & Scalability**: The backend supports pagination and sorting for list endpoints and uses indexing on important fields to speed up queries[cite: 119, 120, 121].
+---
 
-#### Frontend
+## ✨ Features
 
-  * [cite\_start]**Dashboard Pages**: The frontend features a dashboard that displays a paginated, searchable list of all transactions fetched from the `/transactions` API[cite: 150, 151].
-  * [cite\_start]**Transaction Filtering**: Users can filter transactions by status (e.g., "Success", "Pending", "Failed"), school IDs, and date ranges[cite: 160, 161]. [cite\_start]Filters are persistent in the URL[cite: 162].
-  * [cite\_start]**Transaction Details**: There is a page to display transactions for a specific `school_id`[cite: 164].
-  * [cite\_start]**Status Check**: A dedicated page or modal allows users to check the status of a transaction by its `custom_order_id`[cite: 167].
+### Backend Features
 
------
+- **🔒 Secure Authentication**: All API endpoints protected with JWT Authentication
+- **💳 Payment Gateway Integration**: Direct integration with payment API through `POST /create-payment` endpoint
+- **📡 Real-time Webhooks**: Automatic transaction status updates via webhook integration
+- **🗄️ Robust Database**: MongoDB schemas for Orders, Order Status, and Webhook Logs
+- **📊 Advanced Data Retrieval**: MongoDB aggregation pipelines for complex queries
+- **🚀 Performance Optimized**: Pagination, sorting, and database indexing for scalability
 
-### API Endpoints
+### Frontend Features
 
-[cite\_start]All endpoints are secured with **JWT Authentication**[cite: 38].
+- **📈 Interactive Dashboard**: Paginated and searchable transaction listings
+- **🔍 Advanced Filtering**: Filter by status, school ID, and date ranges with URL persistence
+- **🏫 School-specific Views**: Dedicated transaction pages for individual schools
+- **✅ Status Tracking**: Real-time transaction status checking by order ID
 
-  * [cite\_start]**`POST /create-payment`**: Initiates a new payment request[cite: 46].
-  * [cite\_start]**`POST /webhook`**: Receives and processes webhook events from the payment gateway[cite: 59, 61].
-  * [cite\_start]**`GET /transactions`**: Fetches all transactions with support for pagination and sorting[cite: 84, 119, 120].
-  * [cite\_start]**`GET /transactions/school/:schoolId`**: Retrieves all transactions for a specific school[cite: 97, 98].
-  * [cite\_start]**`GET /transaction-status/:custom_order_id`**: Checks the current status of a transaction[cite: 100, 101].
+---
 
------
+## 🚀 API Endpoints
+
+All endpoints require JWT Authentication.
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/create-payment` | Initiate a new payment request |
+| `POST` | `/webhook` | Process payment gateway webhook events |
+| `GET` | `/transactions` | Fetch all transactions (paginated & sortable) |
+| `GET` | `/transactions/school/:schoolId` | Get transactions for specific school |
+| `GET` | `/transaction-status/:custom_order_id` | Check transaction status |
+
+---
+
+## 🛠️ Setup Instructions
 
 ### Backend Setup
 
 #### Prerequisites
-
-  * Node.js
-  * MongoDB Atlas
+- Node.js (v14 or higher)
+- MongoDB Atlas account
 
 #### Installation
+1. Clone the repository
+   ```bash
+   git clone <repository-url>
+   cd <project-directory>
+   ```
 
-1.  Clone the repository.
-2.  Navigate to the project directory.
-3.  Install dependencies: `npm install`
+2. Install dependencies
+   ```bash
+   npm install
+   ```
 
-#### Running the Project
+3. Configure environment variables (see [Environment Configuration](#environment-configuration))
 
-1.  [cite\_start]Create a `.env` file based on the **Environment Configuration** section below[cite: 107].
-2.  Start the application in development mode: `npm run start:dev`
+4. Start development server
+   ```bash
+   npm run start:dev
+   ```
 
 ### Frontend Setup
 
 #### Prerequisites
-
-  * Node.js
+- Node.js (v14 or higher)
 
 #### Installation
+1. Navigate to frontend directory
+   ```bash
+   cd frontend
+   ```
 
-1.  Navigate to the frontend directory.
-2.  Install dependencies: `npm install`
-3.  Start the development server: `npm run dev`
+2. Install dependencies
+   ```bash
+   npm install
+   ```
 
------
+3. Start development server
+   ```bash
+   npm run dev
+   ```
 
-### Environment Configuration
+---
 
-[cite\_start]Create a `.env` file in your backend project root with the following variables[cite: 107]:
+## ⚙️ Environment Configuration
 
-```
+Create a `.env` file in your backend project root:
+
+```env
+# Database
 MONGODB_URI=<Your MongoDB Atlas connection string>
+
+# Payment Gateway
 PAYMENT_API_KEY=<Your Payment API Key>
 PAYMENT_PG_KEY=<Your Payment PG Key>
-JWT_SECRET=<A strong, random string for JWT signing>
+
+# Authentication
+JWT_SECRET=<Strong random string for JWT signing>
 JWT_EXPIRY=<JWT expiry time, e.g., '1h' or '7d'>
 ```
 
-[cite\_start]You can find the payment API credentials in the project description[cite: 52, 53, 54, 55, 56, 57].
+> **Note**: Payment API credentials can be found in the project description documentation.
 
------
+---
 
-### Deployment
+## 🌐 Deployment
 
-  * [cite\_start]**Backend**: The backend should be hosted on a cloud platform like Heroku or AWS[cite: 130].
-  * [cite\_start]**Frontend**: The frontend should be deployed on a service like Netlify, Vercel, or AWS Amplify[cite: 174].
+### Backend Deployment
+Deploy to cloud platforms such as:
+- Heroku
+- AWS EC2/Elastic Beanstalk
+- Google Cloud Platform
+- DigitalOcean
 
------
+### Frontend Deployment
+Deploy to static hosting services:
+- Netlify
+- Vercel
+- AWS Amplify
+- GitHub Pages
 
-### Submission Guidelines
+---
 
-  * [cite\_start]**GitHub Repository**: Push your code to a public GitHub repository[cite: 132].
-  * [cite\_start]**Documentation**: Include a comprehensive `README.md` file with setup instructions and API usage examples[cite: 113, 114, 115].
-  * [cite\_start]**URLs**: Share the hosted project link and the GitHub repository URL[cite: 137].
-  * [cite\_start]**Env File**: Provide the `.env` file for the project[cite: 135].
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 📞 Support
+
+For support and questions, please open an issue in the GitHub repository.

@@ -1,98 +1,99 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+### Project Overview
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This project is a microservice for a School Payment and Dashboard Application. It has a backend that manages transactions and payments through a REST API and a frontend dashboard for displaying data. [cite\_start]The backend uses **Node.js** with **NestJS**, connects to **MongoDB Atlas**, and integrates with a payment gateway[cite: 8, 9, 11]. [cite\_start]The frontend is built with **React.js** and styled with **Tailwind CSS** or another framework[cite: 141, 144, 146].
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+-----
 
-## Description
+### Features
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+#### Backend
 
-## Project setup
+  * [cite\_start]**Payment Gateway Integration**: The application includes a `POST /create-payment` route that accepts payment details and forwards them to the payment API's `create-collect-request` endpoint[cite: 46, 47, 48]. [cite\_start]It generates JWT-signed payloads as required by the payment gateway[cite: 49].
+  * [cite\_start]**Webhook Integration**: A `POST /webhook` endpoint is available to receive transaction updates from the payment gateway and update the database accordingly[cite: 59, 61, 80].
+  * [cite\_start]**User Authentication**: All API endpoints are secured using **JWT Authentication**[cite: 36, 38].
+  * [cite\_start]**Database Schemas**: The application uses **MongoDB** and defines schemas for `Order`, `Order Status`, and `Webhook Logs`[cite: 12, 30, 33].
+  * [cite\_start]**Data Retrieval**: It provides endpoints to fetch transactions, including a route that uses a MongoDB aggregation pipeline to combine order and order status schemas[cite: 83, 85].
+  * [cite\_start]**Performance & Scalability**: The backend supports pagination and sorting for list endpoints and uses indexing on important fields to speed up queries[cite: 119, 120, 121].
 
-```bash
-$ npm install
+#### Frontend
+
+  * [cite\_start]**Dashboard Pages**: The frontend features a dashboard that displays a paginated, searchable list of all transactions fetched from the `/transactions` API[cite: 150, 151].
+  * [cite\_start]**Transaction Filtering**: Users can filter transactions by status (e.g., "Success", "Pending", "Failed"), school IDs, and date ranges[cite: 160, 161]. [cite\_start]Filters are persistent in the URL[cite: 162].
+  * [cite\_start]**Transaction Details**: There is a page to display transactions for a specific `school_id`[cite: 164].
+  * [cite\_start]**Status Check**: A dedicated page or modal allows users to check the status of a transaction by its `custom_order_id`[cite: 167].
+
+-----
+
+### API Endpoints
+
+[cite\_start]All endpoints are secured with **JWT Authentication**[cite: 38].
+
+  * [cite\_start]**`POST /create-payment`**: Initiates a new payment request[cite: 46].
+  * [cite\_start]**`POST /webhook`**: Receives and processes webhook events from the payment gateway[cite: 59, 61].
+  * [cite\_start]**`GET /transactions`**: Fetches all transactions with support for pagination and sorting[cite: 84, 119, 120].
+  * [cite\_start]**`GET /transactions/school/:schoolId`**: Retrieves all transactions for a specific school[cite: 97, 98].
+  * [cite\_start]**`GET /transaction-status/:custom_order_id`**: Checks the current status of a transaction[cite: 100, 101].
+
+-----
+
+### Backend Setup
+
+#### Prerequisites
+
+  * Node.js
+  * MongoDB Atlas
+
+#### Installation
+
+1.  Clone the repository.
+2.  Navigate to the project directory.
+3.  Install dependencies: `npm install`
+
+#### Running the Project
+
+1.  [cite\_start]Create a `.env` file based on the **Environment Configuration** section below[cite: 107].
+2.  Start the application in development mode: `npm run start:dev`
+
+### Frontend Setup
+
+#### Prerequisites
+
+  * Node.js
+
+#### Installation
+
+1.  Navigate to the frontend directory.
+2.  Install dependencies: `npm install`
+3.  Start the development server: `npm run dev`
+
+-----
+
+### Environment Configuration
+
+[cite\_start]Create a `.env` file in your backend project root with the following variables[cite: 107]:
+
+```
+MONGODB_URI=<Your MongoDB Atlas connection string>
+PAYMENT_API_KEY=<Your Payment API Key>
+PAYMENT_PG_KEY=<Your Payment PG Key>
+JWT_SECRET=<A strong, random string for JWT signing>
+JWT_EXPIRY=<JWT expiry time, e.g., '1h' or '7d'>
 ```
 
-## Compile and run the project
+[cite\_start]You can find the payment API credentials in the project description[cite: 52, 53, 54, 55, 56, 57].
 
-```bash
-# development
-$ npm run start
+-----
 
-# watch mode
-$ npm run start:dev
+### Deployment
 
-# production mode
-$ npm run start:prod
-```
+  * [cite\_start]**Backend**: The backend should be hosted on a cloud platform like Heroku or AWS[cite: 130].
+  * [cite\_start]**Frontend**: The frontend should be deployed on a service like Netlify, Vercel, or AWS Amplify[cite: 174].
 
-## Run tests
+-----
 
-```bash
-# unit tests
-$ npm run test
+### Submission Guidelines
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+  * [cite\_start]**GitHub Repository**: Push your code to a public GitHub repository[cite: 132].
+  * [cite\_start]**Documentation**: Include a comprehensive `README.md` file with setup instructions and API usage examples[cite: 113, 114, 115].
+  * [cite\_start]**URLs**: Share the hosted project link and the GitHub repository URL[cite: 137].
+  * [cite\_start]**Env File**: Provide the `.env` file for the project[cite: 135].
